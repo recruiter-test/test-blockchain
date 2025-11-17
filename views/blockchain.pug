@@ -2,7 +2,19 @@ extends layout
 
 block content
   .container-fluid
-    h1 #{__('Blockchain')}
+    .row
+      .col-md-12
+        .text-center(style='margin-bottom: 30px;')
+          div(style='font-size: 64px; margin-bottom: 15px;') ⛓️
+          h1(style='font-size: 36px; font-weight: 700; margin-bottom: 10px;') Blockchain
+          p.lead(style='color: #64748b;') See how blocks link together to form an immutable chain
+        
+        .well(style='background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border: none; margin-bottom: 30px;')
+          .row
+            .col-md-12.text-center
+              h3(style='color: white; margin-bottom: 15px;') 🔗 Chain Integrity
+              p(style='font-size: 16px; opacity: 0.95; margin: 0;') Each block contains the hash of the previous block. Change any data and watch the entire chain break!
+    
     .row.row-horizon
       - var blocks = []
       - blocks.push({block: 1, chain: 1, nonce: 11316, previous: '0000000000000000000000000000000000000000000000000000000000000000'})

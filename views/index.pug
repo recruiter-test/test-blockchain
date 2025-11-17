@@ -1,13 +1,169 @@
 extends layout
 
 block content
-  a(href='https://github.com/anders94/blockchain-demo/')
-    img.github-ribbon(src='/images/fork-me-on-github-ribbon.png', alt='Fork me on GitHub')
   .container
-    h1 Blockchain Demo
-    .embed-responsive.embed-responsive-16by9
-      iframe.embed-responsive-item(src='https://www.youtube.com/embed/_160oMzblY8')
-    br
-    p.pull-right by 
-      a(href='http://andersbrownworth.com/') Anders Brownworth 
-      | 1K3NvcuZzVTueHW1qhkG2Cm3viRkh2EXJp
+    .row
+      .col-md-12
+        .text-center(style='margin-bottom: 40px;')
+          h1(style='font-size: 48px; font-weight: 700; margin-bottom: 16px;') 
+            span(style='font-size: 56px;') ⛓️
+            br
+            | Sobapps - test
+          p.lead(style='font-size: 20px; color: #64748b;') Learn how blockchain works through interactive demonstrations
+        
+        .well(style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;')
+          .row
+            .col-md-8.col-md-offset-2.text-center
+              h2(style='color: white; margin-bottom: 20px;') 🎓 Interactive Learning Experience
+              p(style='font-size: 18px; margin-bottom: 30px;') Explore the fundamental concepts of blockchain technology through hands-on examples
+              .row(style='margin-top: 30px;')
+                .col-md-4
+                  .text-center
+                    div(style='font-size: 48px; margin-bottom: 10px;') #️⃣
+                    h4(style='color: white;') Hash Functions
+                    p(style='font-size: 14px; opacity: 0.9;') See how data transforms
+                .col-md-4
+                  .text-center
+                    div(style='font-size: 48px; margin-bottom: 10px;') 📦
+                    h4(style='color: white;') Blocks
+                    p(style='font-size: 14px; opacity: 0.9;') Build your first block
+                .col-md-4
+                  .text-center
+                    div(style='font-size: 48px; margin-bottom: 10px;') ⛓️
+                    h4(style='color: white;') Chains
+                    p(style='font-size: 14px; opacity: 0.9;') Link blocks together
+        
+        .row(style='margin-top: 40px;')
+          .col-md-4
+            .well.text-center(style='height: 280px;')
+              div(style='font-size: 64px; margin-bottom: 20px;') 🔐
+              h3 Cryptographic Security
+              p Learn how SHA-256 hashing ensures data integrity and immutability
+              a.btn.btn-primary(href='/hash', style='margin-top: 10px;') Start Learning →
+          
+          .col-md-4
+            .well.text-center(style='height: 280px;')
+              div(style='font-size: 64px; margin-bottom: 20px;') 🌐
+              h3 Distributed Network
+              p Understand how blockchain achieves consensus across multiple nodes
+              a.btn.btn-primary(href='/distributed', style='margin-top: 10px;') Explore Network →
+          
+          .col-md-4
+            .well.text-center(style='height: 280px;')
+              div(style='font-size: 64px; margin-bottom: 20px;') 🪙
+              h3 Digital Tokens
+              p See how cryptocurrencies and tokens work on the blockchain
+              a.btn.btn-primary(href='/tokens', style='margin-top: 10px;') View Tokens →
+        
+        // Developer Test Section
+        .row(style='margin-top: 40px;')
+          .col-md-12
+            .well(style='background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); color: white; border: none;')
+              .row
+                .col-md-12.text-center
+                  div(style='font-size: 56px; margin-bottom: 15px;') 🧪
+                  h2(style='color: white; margin-bottom: 20px;') Developer Test - 30 Minutes
+                  p(style='font-size: 18px; margin-bottom: 30px; opacity: 0.95;') Test your blockchain knowledge and Node.js skills with our practical coding challenge
+              
+              .row(style='margin-top: 30px;')
+                .col-md-4
+                  .text-center(style='padding: 20px; background: rgba(255,255,255,0.1); border-radius: 12px; margin-bottom: 15px;')
+                    div(style='font-size: 48px; margin-bottom: 10px;') 📝
+                    h4(style='color: white; margin-bottom: 10px;') Step 1: Fork & Setup
+                    p(style='font-size: 14px; opacity: 0.9; margin: 0;') Fork the repository, clone it, and create your test branch
+                
+                .col-md-4
+                  .text-center(style='padding: 20px; background: rgba(255,255,255,0.1); border-radius: 12px; margin-bottom: 15px;')
+                    div(style='font-size: 48px; margin-bottom: 10px;') 💻
+                    h4(style='color: white; margin-bottom: 10px;') Step 2: Complete Tasks
+                    p(style='font-size: 14px; opacity: 0.9; margin: 0;') Answer concept questions, fix code issues, and build an API endpoint
+                
+                .col-md-4
+                  .text-center(style='padding: 20px; background: rgba(255,255,255,0.1); border-radius: 12px; margin-bottom: 15px;')
+                    div(style='font-size: 48px; margin-bottom: 10px;') 🚀
+                    h4(style='color: white; margin-bottom: 10px;') Step 3: Submit PR
+                    p(style='font-size: 14px; opacity: 0.9; margin: 0;') Push your changes and create a pull request to the original repo
+              
+              .row(style='margin-top: 30px;')
+                .col-md-12.text-center
+                  a.btn.btn-lg(href='https://github.com/YOUR-REPO/blockchain-demo', target='_blank', style='background: white; color: #ef4444; font-weight: 600; padding: 15px 40px; font-size: 18px;') 
+                    span(style='margin-right: 10px;') 🔗
+                    | Start Test Challenge
+                  p(style='margin-top: 15px; font-size: 14px; opacity: 0.9;') Duration: 30 minutes | Difficulty: Intermediate | Format: Practical Coding
+        
+        // Test Details Section
+        .row(style='margin-top: 30px;')
+          .col-md-12
+            .well
+              h3(style='margin-top: 0;') 
+                span(style='margin-right: 10px;') 📋
+                | Test Overview
+              .row
+                .col-md-6
+                  h4(style='color: #2563eb;') What You'll Do:
+                  ul(style='line-height: 2;')
+                    li 
+                      strong Task 1 (5 min):
+                      |  Answer blockchain concept questions
+                    li 
+                      strong Task 2 (7 min):
+                      |  Fix code issues in routes/index.js
+                    li 
+                      strong Task 3 (8 min):
+                      |  Create a new API endpoint
+                    li 
+                      strong Submission (5 min):
+                      |  Commit, push, and create PR
+                
+                .col-md-6
+                  h4(style='color: #10b981;') What We Evaluate:
+                  ul(style='line-height: 2;')
+                    li 
+                      span(style='margin-right: 8px;') ✅
+                      | Blockchain concept understanding
+                    li 
+                      span(style='margin-right: 8px;') ✅
+                      | Code quality and best practices
+                    li 
+                      span(style='margin-right: 8px;') ✅
+                      | API development skills
+                    li 
+                      span(style='margin-right: 8px;') ✅
+                      | Git workflow proficiency
+              
+              .row(style='margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;')
+                .col-md-12
+                  h4(style='color: #64748b; margin-bottom: 15px;') 
+                    span(style='margin-right: 8px;') 🎯
+                    | Scoring Breakdown:
+                  .row
+                    .col-md-3.text-center
+                      .well(style='background: #eff6ff; border-color: #93c5fd; margin-bottom: 10px;')
+                        h2(style='color: #2563eb; margin: 0;') 30
+                        p(style='margin: 0; color: #64748b;') Concept Questions
+                    .col-md-3.text-center
+                      .well(style='background: #f0fdf4; border-color: #86efac; margin-bottom: 10px;')
+                        h2(style='color: #10b981; margin: 0;') 35
+                        p(style='margin: 0; color: #64748b;') Code Quality
+                    .col-md-3.text-center
+                      .well(style='background: #fef3c7; border-color: #fcd34d; margin-bottom: 10px;')
+                        h2(style='color: #f59e0b; margin: 0;') 35
+                        p(style='margin: 0; color: #64748b;') API Development
+                    .col-md-3.text-center
+                      .well(style='background: #fce7f3; border-color: #f9a8d4; margin-bottom: 10px;')
+                        h2(style='color: #ec4899; margin: 0;') +10
+                        p(style='margin: 0; color: #64748b;') Bonus Points
+        
+        .row(style='margin-top: 30px;')
+          .col-md-12
+            .well(style='background: #f8fafc; border: 2px dashed #cbd5e1;')
+              .row
+                .col-md-8
+                  h3(style='margin-top: 0;') 📺 Watch the Video Tutorial
+                  p Learn the basics of blockchain technology with this comprehensive video guide
+                .col-md-4.text-right
+                  a.btn.btn-lg.btn-primary(href='https://www.youtube.com/watch?v=_160oMzblY8', target='_blank', style='margin-top: 10px;') 
+                    span(style='margin-right: 8px;') ▶️
+                    | Watch Now
+        
+        .text-center(style='margin-top: 50px; padding: 30px 0; border-top: 1px solid #e2e8f0;')

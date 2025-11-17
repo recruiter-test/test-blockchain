@@ -2,7 +2,19 @@ extends layout
 
 block content
   .container-fluid
-    h1 #{__('Distributed Blockchain')}
+    .row
+      .col-md-12
+        .text-center(style='margin-bottom: 30px;')
+          div(style='font-size: 64px; margin-bottom: 15px;') 🌐
+          h1(style='font-size: 36px; font-weight: 700; margin-bottom: 10px;') Distributed Blockchain
+          p.lead(style='color: #64748b;') Experience how blockchain achieves consensus across multiple peers
+        
+        .well(style='background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; border: none; margin-bottom: 30px;')
+          .row
+            .col-md-12.text-center
+              h3(style='color: white; margin-bottom: 15px;') 🤝 Distributed Consensus
+              p(style='font-size: 16px; opacity: 0.95; margin: 0;') Three peers maintain identical copies. Modify one peer's data and see how the network detects tampering!
+    
     - var peers = {1: 'A', 2: 'B', 3: 'C'}
       each peer, chain in peers
         h3 #{__('Peer')} #{peer}

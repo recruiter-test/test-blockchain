@@ -2,20 +2,55 @@ extends layout
 
 block content
   .container
+    .row
+      .col-md-12
+        .text-center(style='margin-bottom: 40px;')
+          div(style='font-size: 64px; margin-bottom: 15px;') #️⃣
+          h1(style='font-size: 36px; font-weight: 700; margin-bottom: 10px;') SHA256 Hash Function
+          p.lead(style='color: #64748b;') See how any data transforms into a unique 256-bit hash
+        
+        .well(style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; margin-bottom: 30px;')
+          .row
+            .col-md-12.text-center
+              h3(style='color: white; margin-bottom: 15px;') 💡 How It Works
+              p(style='font-size: 16px; opacity: 0.95; margin: 0;') Type or modify any text below and watch the hash change instantly. Even a tiny change creates a completely different hash!
+        
+        .well#well1(style='padding: 30px;')
+          form.form-horizontal
+            .form-group(style='margin-bottom: 30px;')
+              label.control-label(for='data', style='font-size: 16px; font-weight: 600; margin-bottom: 12px;') 
+                span(style='margin-right: 8px;') 📝
+                | Input Data
+              div
+                textarea#data.form-control(rows='8', placeholder='Type anything here...', style='font-size: 14px; resize: vertical;')
+                p.text-muted(style='margin-top: 8px; font-size: 13px;') Try changing a single character and see how the hash changes completely
 
-    h1 SHA256 #{__('Hash')}
-    .well#well1
-      form.form-horizontal
-
-        .form-group
-          label.col-sm-2.control-label(for='data') #{__('Data')}:
-          .col-sm-10
-            textarea#data.form-control(rows='10')
-
-        .form-group
-          label.col-sm-2.control-label(for='hash') #{__('Hash')}:
-          .col-sm-10
-            input#hash.form-control(type='text', disabled)
+            .form-group(style='margin-bottom: 0;')
+              label.control-label(for='hash', style='font-size: 16px; font-weight: 600; margin-bottom: 12px;') 
+                span(style='margin-right: 8px;') 🔐
+                | SHA256 Hash Output
+              div
+                input#hash.form-control(type='text', disabled, style='font-family: monospace; font-size: 13px; background: #f8fafc; font-weight: 600; color: #2563eb;')
+                p.text-muted(style='margin-top: 8px; font-size: 13px;') This 64-character hexadecimal string is the cryptographic hash
+        
+        .row(style='margin-top: 30px;')
+          .col-md-4
+            .well.text-center(style='background: #eff6ff; border-color: #93c5fd;')
+              div(style='font-size: 40px; margin-bottom: 10px;') ⚡
+              h4(style='color: #2563eb;') Deterministic
+              p(style='font-size: 14px; color: #64748b; margin: 0;') Same input always produces the same hash
+          
+          .col-md-4
+            .well.text-center(style='background: #f0fdf4; border-color: #86efac;')
+              div(style='font-size: 40px; margin-bottom: 10px;') 🔄
+              h4(style='color: #10b981;') One-Way Function
+              p(style='font-size: 14px; color: #64748b; margin: 0;') Cannot reverse the hash back to original data
+          
+          .col-md-4
+            .well.text-center(style='background: #fef3c7; border-color: #fcd34d;')
+              div(style='font-size: 40px; margin-bottom: 10px;') 🎯
+              h4(style='color: #f59e0b;') Collision Resistant
+              p(style='font-size: 14px; color: #64748b; margin: 0;') Nearly impossible to find two inputs with same hash
 
   script.
     function getText(block, chain) {

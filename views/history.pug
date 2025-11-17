@@ -1,0 +1,247 @@
+extends layout
+
+block content
+  .container
+    .row
+      .col-md-12
+        .text-center(style='margin-bottom: 40px;')
+          div(style='font-size: 64px; margin-bottom: 15px;') 📚
+          h1(style='font-size: 36px; font-weight: 700; margin-bottom: 10px;') Blockchain History
+          p.lead(style='color: #64748b;') View and manage all blocks stored in the local database
+        
+        .well(style='background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); color: white; border: none; margin-bottom: 30px;')
+          .row
+            .col-md-8.col-md-offset-2.text-center
+              h3(style='color: white; margin-bottom: 15px;') 💾 Persistent Storage
+              p(style='font-size: 16px; opacity: 0.95; margin-bottom: 20px;') All blocks are saved to a local text file. View statistics, search blocks, and manage your blockchain history.
+              .row(style='margin-top: 20px;')
+                .col-md-4
+                  #totalBlocks.text-center
+                    div(style='font-size: 36px; font-weight: 700; margin-bottom: 5px;') 0
+                    p(style='font-size: 14px; opacity: 0.9; margin: 0;') Total Blocks
+                .col-md-4
+                  #latestBlock.text-center
+                    div(style='font-size: 36px; font-weight: 700; margin-bottom: 5px;') -
+                    p(style='font-size: 14px; opacity: 0.9; margin: 0;') Latest Block
+                .col-md-4
+                  #lastUpdated.text-center
+                    div(style='font-size: 36px; font-weight: 700; margin-bottom: 5px;') -
+                    p(style='font-size: 14px; opacity: 0.9; margin: 0;') Last Updated
+        
+        // Action Buttons
+        .row(style='margin-bottom: 30px;')
+          .col-md-4
+            button#refreshBtn.btn.btn-primary.btn-lg(style='width: 100%; padding: 15px;')
+              span(style='margin-right: 8px;') 🔄
+              | Refresh Data
+          .col-md-4
+            button#saveBlockBtn.btn.btn-success.btn-lg(style='width: 100%; padding: 15px;')
+              span(style='margin-right: 8px;') 💾
+              | Save Test Block
+          .col-md-4
+            button#clearHistoryBtn.btn.btn-danger.btn-lg(style='width: 100%; padding: 15px;')
+              span(style='margin-right: 8px;') 🗑️
+              | Clear All History
+        
+        // Blocks Display
+        #blocksContainer
+          .text-center(style='padding: 60px 20px;')
+            div(style='font-size: 48px; margin-bottom: 15px;') ⏳
+            p.text-muted Loading blockchain history...
+        
+        // Pagination
+        #paginationContainer.text-center(style='margin-top: 30px; display: none;')
+          nav
+            ul#pagination.pagination.pagination-lg
+
+  script.
+    let currentPage = 1;
+    const limit = 10;
+
+    // Load statistics
+    function loadStats() {
+      $.get('/api/history/stats', function(data) {
+        $('#totalBlocks div').text(data.totalBlocks);
+        $('#latestBlock div').text(data.latestBlockNumber || '-');
+        
+        if (data.lastUpdated) {
+          const date = new Date(data.lastUpdated);
+          $('#lastUpdated div').text(date.toLocaleTimeString());
+        } else {
+          $('#lastUpdated div').text('-');
+        }
+      }).fail(function() {
+        console.error('Failed to load stats');
+      });
+    }
+
+    // Load blocks
+    function loadBlocks(page) {
+      currentPage = page;
+      $('#blocksContainer').html('<div class="text-center" style="padding: 60px 20px;"><div style="font-size: 48px; margin-bottom: 15px;">⏳</div><p class="text-muted">Loading blocks...</p></div>');
+      
+      $.get('/api/history?page=' + page + '&limit=' + limit, function(data) {
+        if (data.blocks.length === 0) {
+          $('#blocksContainer').html('<div class="well text-center" style="padding: 60px 20px;"><div style="font-size: 64px; margin-bottom: 20px;">📭</div><h3 style="color: #64748b;">No Blocks Found</h3><p class="text-muted">Start by saving some blocks to see them here.</p></div>');
+          $('#paginationContainer').hide();
+          return;
+        }
+        
+        let html = '';
+        data.blocks.forEach(function(block, index) {
+          const isValid = block.hash.startsWith('0000');
+          const bgColor = isValid ? '#f0fdf4' : '#fef2f2';
+          const borderColor = isValid ? '#86efac' : '#fca5a5';
+          const icon = isValid ? '✅' : '❌';
+          
+          html += '<div class="well" style="background: ' + bgColor + '; border-color: ' + borderColor + '; margin-bottom: 20px;">';
+          html += '<div class="row">';
+          html += '<div class="col-md-1 text-center"><div style="font-size: 48px;">' + icon + '</div></div>';
+          html += '<div class="col-md-11">';
+          html += '<div class="row">';
+          html += '<div class="col-md-6"><strong style="color: #2563eb;">Block #' + block.blockNumber + '</strong><br><small class="text-muted">' + new Date(block.timestamp).toLocaleString() + '</small></div>';
+          html += '<div class="col-md-6 text-right"><span class="label label-' + (isValid ? 'success' : 'danger') + '">' + (isValid ? 'VALID' : 'INVALID') + '</span> <span class="label label-default">Difficulty: ' + block.difficulty + '</span></div>';
+          html += '</div>';
+          html += '<div style="margin-top: 15px;"><strong>Data:</strong><br><code style="display: block; margin-top: 5px; padding: 10px; background: white; border-radius: 6px; word-break: break-all;">' + (block.data || 'No data') + '</code></div>';
+          html += '<div style="margin-top: 10px;"><strong>Hash:</strong><br><code style="display: block; margin-top: 5px; padding: 10px; background: white; border-radius: 6px; font-size: 12px; word-break: break-all; color: ' + (isValid ? '#10b981' : '#ef4444') + ';">' + block.hash + '</code></div>';
+          html += '<div style="margin-top: 10px;"><strong>Previous Hash:</strong><br><code style="display: block; margin-top: 5px; padding: 10px; background: white; border-radius: 6px; font-size: 12px; word-break: break-all;">' + block.previousHash + '</code></div>';
+          html += '<div class="row" style="margin-top: 10px;">';
+          html += '<div class="col-md-6"><strong>Nonce:</strong> <code>' + block.nonce + '</code></div>';
+          html += '<div class="col-md-6"><strong>Miner:</strong> <code>' + block.miner + '</code></div>';
+          html += '</div>';
+          html += '<div style="margin-top: 15px;"><button class="btn btn-danger btn-sm deleteBlockBtn" data-block="' + block.blockNumber + '"><span style="margin-right: 5px;">🗑️</span> Delete Block</button></div>';
+          html += '</div></div></div>';
+        });
+        
+        $('#blocksContainer').html(html);
+        
+        // Setup delete buttons
+        $('.deleteBlockBtn').click(function() {
+          const blockNumber = $(this).data('block');
+          if (confirm('Are you sure you want to delete block #' + blockNumber + '?')) {
+            deleteBlock(blockNumber);
+          }
+        });
+        
+        // Setup pagination
+        if (data.totalPages > 1) {
+          let paginationHtml = '';
+          
+          // Previous button
+          if (currentPage > 1) {
+            paginationHtml += '<li><a href="#" data-page="' + (currentPage - 1) + '">«</a></li>';
+          }
+          
+          // Page numbers
+          for (let i = 1; i <= data.totalPages; i++) {
+            if (i === currentPage) {
+              paginationHtml += '<li class="active"><a href="#">' + i + '</a></li>';
+            } else {
+              paginationHtml += '<li><a href="#" data-page="' + i + '">' + i + '</a></li>';
+            }
+          }
+          
+          // Next button
+          if (currentPage < data.totalPages) {
+            paginationHtml += '<li><a href="#" data-page="' + (currentPage + 1) + '">»</a></li>';
+          }
+          
+          $('#pagination').html(paginationHtml);
+          $('#paginationContainer').show();
+          
+          // Setup pagination clicks
+          $('#pagination a').click(function(e) {
+            e.preventDefault();
+            const page = $(this).data('page');
+            if (page) {
+              loadBlocks(page);
+              $('html, body').animate({ scrollTop: 0 }, 300);
+            }
+          });
+        } else {
+          $('#paginationContainer').hide();
+        }
+      }).fail(function() {
+        $('#blocksContainer').html('<div class="well text-center" style="padding: 60px 20px; background: #fef2f2; border-color: #fca5a5;"><div style="font-size: 64px; margin-bottom: 20px;">❌</div><h3 style="color: #ef4444;">Error Loading Blocks</h3><p class="text-muted">Failed to load blockchain history. Please try again.</p></div>');
+      });
+    }
+
+    // Delete block
+    function deleteBlock(blockNumber) {
+      $.ajax({
+        url: '/api/blocks/' + blockNumber,
+        type: 'DELETE',
+        success: function() {
+          alert('Block #' + blockNumber + ' deleted successfully!');
+          loadStats();
+          loadBlocks(currentPage);
+        },
+        error: function() {
+          alert('Failed to delete block. Please try again.');
+        }
+      });
+    }
+
+    // Save test block
+    function saveTestBlock() {
+      const blockNumber = Math.floor(Math.random() * 1000);
+      const testBlock = {
+        blockNumber: blockNumber,
+        data: 'Test block created at ' + new Date().toISOString(),
+        previousHash: '0000' + 'a'.repeat(60),
+        hash: '0000' + 'b'.repeat(60),
+        nonce: Math.floor(Math.random() * 100000),
+        difficulty: 4,
+        miner: 'Test User'
+      };
+      
+      $.ajax({
+        url: '/api/blocks',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(testBlock),
+        success: function() {
+          alert('Test block saved successfully!');
+          loadStats();
+          loadBlocks(1);
+        },
+        error: function() {
+          alert('Failed to save test block. Please try again.');
+        }
+      });
+    }
+
+    // Clear all history
+    function clearHistory() {
+      if (confirm('Are you sure you want to delete ALL blocks? This cannot be undone!')) {
+        $.ajax({
+          url: '/api/history',
+          type: 'DELETE',
+          success: function(data) {
+            alert('All history cleared! Deleted ' + data.deletedCount + ' blocks.');
+            loadStats();
+            loadBlocks(1);
+          },
+          error: function() {
+            alert('Failed to clear history. Please try again.');
+          }
+        });
+      }
+    }
+
+    // Event handlers
+    $(function() {
+      loadStats();
+      loadBlocks(1);
+      
+      $('#refreshBtn').click(function() {
+        loadStats();
+        loadBlocks(currentPage);
+      });
+      
+      $('#saveBlockBtn').click(saveTestBlock);
+      $('#clearHistoryBtn').click(clearHistory);
+      
+      // Auto-refresh stats every 30 seconds
+      setInterval(loadStats, 30000);
+    });

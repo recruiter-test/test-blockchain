@@ -2,7 +2,19 @@ extends layout
 
 block content
   .container-fluid
-    h1 #{__('Tokens')}
+    .row
+      .col-md-12
+        .text-center(style='margin-bottom: 30px;')
+          div(style='font-size: 64px; margin-bottom: 15px;') 🪙
+          h1(style='font-size: 36px; font-weight: 700; margin-bottom: 10px;') Token Transactions
+          p.lead(style='color: #64748b;') See how digital tokens and cryptocurrencies work on the blockchain
+        
+        .well(style='background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; border: none; margin-bottom: 30px;')
+          .row
+            .col-md-12.text-center
+              h3(style='color: white; margin-bottom: 15px;') 💸 Digital Transactions
+              p(style='font-size: 16px; opacity: 0.95; margin: 0;') Each block contains multiple token transfers. Watch how transactions are recorded immutably!
+    
     - var peers = {1: 'A', 2: 'B', 3: 'C'}
       each peer, chain in peers
         h3 #{__('Peer')} #{peer}

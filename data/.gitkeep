@@ -1,0 +1,2 @@
+# This directory stores blockchain history in text file format
+# blockchain-history.txt will be created automatically when blocks are saved

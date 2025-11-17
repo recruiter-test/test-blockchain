@@ -1,109 +1,354 @@
-# Blockchain Demo
-A web-based demonstration of blockchain concepts.
+# Sobapps - test - 30 Minute Developer Test
 
-[![Blockchain 101 - Demo](https://img.youtube.com/vi/_160oMzblY8/0.jpg)](https://www.youtube.com/watch?v=_160oMzblY8)
+## Test Overview
+**Duration:** 30 minutes  
+**Format:** Practical coding test with GitHub submission  
+**Goal:** Assess blockchain understanding and Node.js development skills
 
-This is a very basic visual introduction to the concepts behind a blockchain. We introduce 
-the idea of an immutable ledger using an interactive web demo that is available here:
+---
 
-http://andersbrownworth.com/blockchain/
+## Setup Instructions (5 minutes)
 
-## Setup
-Get the code:
+### For the Recruiter - Before the Test
 
-```
-git clone https://github.com/anders94/blockchain-demo.git
-```
+1. **Create a test repository** (or use existing blockchain-demo repo)
+2. **Make sure the repository is public** (so candidates can fork it)
+3. **Share the repository URL** with the candidate
 
-Install dependencies:
+### For the Developer - Test Setup
 
-```
+1. **Fork the repository:**
+   - Go to the repository URL provided
+   - Click the "Fork" button in the top-right corner
+   - This creates a copy under your GitHub account
+
+2. **Clone YOUR forked repository:**
+```bash
+git clone <your-forked-repository-url>
 cd blockchain-demo
+```
+
+3. **Create your test branch** (use your name):
+```bash
+git checkout -b test/<your-name>
+# Example: git checkout -b test/john-smith
+```
+
+4. **Install dependencies:**
+```bash
 npm install
 ```
-Run the server:
 
-```
+5. **Start the application:**
+```bash
 npm start
 ```
 
-OR
+6. **Verify it works:**
+   - Open browser: `http://localhost:3000`
+   - Confirm the homepage loads
 
-```
-./bin/www
-```
-#For windows: if the above command didn't work, use this (make sure you have Node.js installed in your system):
-```
-node ./bin/www      
-```
+---
 
-Point a web browser at the demo:
+## Test Tasks (20 minutes)
 
-```
-http://localhost:3000
-```
+### Task 1: Blockchain Concept Understanding (5 minutes)
 
-## Setup using Docker
+**Navigate through the demo and answer these questions in a file:**
 
-Get the code:
+Create a file: `ANSWERS.md`
 
-```
-git clone https://github.com/anders94/blockchain-demo.git
-```
+```markdown
+# Blockchain Test Answers
 
-Run the Docker setup:
+## Task 1: Concept Questions
 
-```
-cd blockchain-demo
-docker-compose up -d
+1. What happens to the hash when you change data in a block?
+
+2. What is a "nonce" and why is it needed?
+
+3. In the blockchain page, why do all subsequent blocks turn red when you modify one block?
+
+4. In the distributed blockchain, how does the network know which chain is correct?
 ```
 
-Point a web browser at the demo:
+**Deliverable:** Complete `ANSWERS.md` with your answers
 
+---
+
+### Task 2: Fix Code Issues (7 minutes)
+
+**File:** `routes/index.js`
+
+**Problems to fix:**
+1. Remove unused `async` import
+2. Remove unused `next` parameters
+3. Add validation to prevent accessing invalid pages
+4. Add error handling
+
+**Valid pages are:** `hash`, `block`, `blockchain`, `distributed`, `tokens`, `coinbase`
+
+**Deliverable:** Fixed `routes/index.js` file
+
+---
+
+### Task 3: Add New API Endpoint (8 minutes)
+
+**Create a new API endpoint that returns block information as JSON**
+
+**Requirements:**
+- Route: `GET /api/blocks/:blockNumber`
+- Returns JSON with block data
+- Example response:
+```json
+{
+  "blockNumber": 1,
+  "timestamp": "2024-11-16T10:30:00Z",
+  "data": "Sample transaction data",
+  "previousHash": "0000abc...",
+  "hash": "0000def...",
+  "nonce": 12345
+}
 ```
-http://localhost:3000
+
+**Where to add:**
+- Add the route in `routes/blocks.js` (API routes)
+
+**Deliverable:** Working API endpoint that returns JSON
+
+---
+
+## Submission Instructions (5 minutes)
+
+### Step 1: Commit Your Changes
+```bash
+git add .
+git commit -m "Complete 30-minute blockchain test - <your-name>"
 ```
 
-## Optional Configuration
-You can adjust the "number of zeros" required by the demo by editing the first two lines of
-`public/javascripts/blockchain.js`.
+### Step 2: Push to YOUR Fork
+```bash
+git push origin test/<your-name>
+```
 
-Because there are 16 possible characters in a hex value, each time you increment the difficulty
-by one you make the puzzle 16 times harder. In my testing, a difficulty of 6 requires a
-maximumNonce well over 500,000,000.
+### Step 3: Create Pull Request to Original Repository
+1. Go to **your forked repository** on GitHub
+2. You'll see a message: "test/<your-name> had recent pushes"
+3. Click "Compare & pull request" button
+4. **Important:** Make sure the base repository is the **original repo** (not your fork)
+5. Title: "Test Submission - <Your Name>"
+6. In the description, add:
+   - Time taken
+   - Any challenges faced
+   - Any assumptions made
+7. Click "Create pull request"
 
-If you adjust the difficulty above 4, blocks will show up as not mined because the demo data
-assumes 4 zeros for a signed block. For example, on the `http://localhost:3000/block` page
-with a difficulty of 6, the first nonce that works is `8719932` yielding a hash of
-`000000669445c22167511857d8f3b822b331c3342f25dfdcb326e35c1a7aa267`. This gets out of hand fairly
-quickly though. Here's some time estimates at the various thresholds.
+### Step 4: Notify Recruiter
+Send a message confirming your submission with the PR link.
 
-|digits|nonce|time estimate|
-|------|-------|-------------|
-|4|500,000|15 minutes
-|5|8,000,000|4 hours
-|6|128,000,000|3 days
-|7|2,048,000,000|a month
-|8|32,768,000,000|2 years
-|9|524,288,000,000|30 years
-|10|8,388,608,000,000|481 years
-|11|134,217,728,000,000|7,690 years
-|12|2,147,483,648,000,000|123,036 years
-|13|34,359,738,368,000,000|1,968,581 years
-|14|549,755,813,888,000,000|31,497,291 years
-|15|8,796,093,022,208,000,000|503,956,662 years
+---
 
-In the production bitcoin blockchain, block `458,091` has the hash digest
-`00000000000000000000011246f099d94f91628d71c9d75ad2f9a06e2beb7e92`. That's 21 zeros in a row!
-That one block would take this software approximately 8,454,989,768,407,765 years to mine.
+## Evaluation Criteria
 
-### Public Private Key Demo
+### Task 1: Concept Understanding (30 points)
+- ✓ Correct understanding of hash properties (10 pts)
+- ✓ Explains nonce correctly (5 pts)
+- ✓ Understands blockchain immutability (10 pts)
+- ✓ Understands distributed consensus (5 pts)
 
-The 2nd part of the 101 session:
-* https://github.com/anders94/public-private-key-demo
+### Task 2: Code Quality (35 points)
+- ✓ Removed unused imports (5 pts)
+- ✓ Clean code (no unused variables) (5 pts)
+- ✓ Added page validation (15 pts)
+- ✓ Proper error handling (10 pts)
 
-## Send Thanks
+### Task 3: API Development (35 points)
+- ✓ Route created correctly (10 pts)
+- ✓ Returns valid JSON (10 pts)
+- ✓ Proper data structure (10 pts)
+- ✓ Code follows project conventions (5 pts)
 
-![](public/images/qr.png)
+### Bonus Points (10 points)
+- ✓ Added comments to code (3 pts)
+- ✓ Tested the API endpoint (3 pts)
+- ✓ Clean git commit messages (2 pts)
+- ✓ Completed under 30 minutes (2 pts)
 
-Bitcoin gratefully accepted: `1K3NvcuZzVTueHW1qhkG2Cm3viRkh2EXJp`
+**Total: 100 points + 10 bonus**
+
+**Passing Score:**
+- Junior: 60+ points
+- Mid-Level: 75+ points
+- Senior: 85+ points
+
+---
+
+## Quick Reference for Developers
+
+### Testing Your API Endpoint
+```bash
+# In a new terminal (keep npm start running)
+curl http://localhost:3000/api/blocks/1
+```
+
+### Git Commands Cheat Sheet
+```bash
+# Check your branch
+git branch
+
+# See your changes
+git status
+
+# Check remote URL (should be YOUR fork)
+git remote -v
+
+# Add all changes
+git add .
+
+# Commit
+git commit -m "Your message"
+
+# Push to YOUR fork
+git push origin test/<your-name>
+```
+
+### Valid Page Names
+- hash
+- block
+- blockchain
+- distributed
+- tokens
+- coinbase
+
+---
+
+## Sample Solutions (For Recruiter Reference Only)
+
+### Task 2: Fixed routes/pages.js
+```javascript
+var express = require('express');
+var router = express.Router();
+
+// Valid pages list
+const validPages = ['hash', 'block', 'blockchain', 'distributed', 'tokens', 'coinbase'];
+
+router.get('/', function(req, res) {
+  res.render('index');
+});
+
+router.get('/:page', function(req, res, next) {
+  const page = req.params.page;
+  
+  // Validate page exists
+  if (!validPages.includes(page)) {
+    return next(); // Pass to 404 handler
+  }
+  
+  res.render(page, {page: page});
+});
+
+module.exports = router;
+```
+
+### Task 3: API Endpoint in routes/blocks.js
+```javascript
+// GET /api/blocks/:blockNumber - Get specific block
+router.get('/:blockNumber', function(req, res) {
+  const blockNumber = parseInt(req.params.blockNumber);
+  
+  // Validate block number
+  if (isNaN(blockNumber) || blockNumber < 0) {
+    return res.status(400).json({
+      error: 'Invalid block number'
+    });
+  }
+  
+  // Sample block data
+  const blockData = {
+    blockNumber: blockNumber,
+    timestamp: new Date().toISOString(),
+    data: `Transaction data for block ${blockNumber}`,
+    previousHash: blockNumber > 0 ? '0000' + 'a'.repeat(60) : '0',
+    hash: '0000' + 'b'.repeat(60),
+    nonce: Math.floor(Math.random() * 100000)
+  };
+  
+  res.json(blockData);
+});
+```
+
+---
+
+## Tips for Recruiters
+
+### Before the Test
+- [ ] Repository is set up and public (so it can be forked)
+- [ ] Test instructions have been shared
+- [ ] Repository URL has been provided to candidate
+- [ ] Timer is ready (30 minutes)
+
+### During the Test
+- [ ] Start timer when candidate begins coding
+- [ ] Be available for technical issues (not coding help)
+- [ ] Monitor for any Git/GitHub access issues
+
+### After the Test
+- [ ] Review the Pull Request
+- [ ] Check commit history and timestamps
+- [ ] Test the code locally
+- [ ] Score using the rubric above
+- [ ] Provide feedback within 24 hours
+
+### Red Flags
+- ❌ No commits or empty PR
+- ❌ Code doesn't run
+- ❌ Copied solutions without understanding
+- ❌ No attempt at Task 3
+- ❌ Poor Git practices (no commits, bad messages)
+
+### Green Flags
+- ✅ Clean, readable code
+- ✅ Good commit messages
+- ✅ All tasks attempted
+- ✅ Code runs without errors
+- ✅ Shows understanding in answers
+- ✅ Asks good questions
+
+---
+
+## Troubleshooting
+
+### "npm install" fails
+```bash
+# Clear cache and retry
+npm cache clean --force
+npm install
+```
+
+### Port 3000 already in use
+```bash
+# Windows
+netstat -ano | findstr :3000
+taskkill /PID <PID> /F
+
+# Or change port in bin/www file
+```
+
+### Git push permission denied
+- Make sure you forked the repository first
+- Verify you're pushing to YOUR fork (not the original repo)
+- Check the remote URL: `git remote -v`
+- Ensure you're authenticated with GitHub
+
+### Can't create branch
+```bash
+# Make sure you're on main/master first
+git checkout main
+git pull
+git checkout -b test/<your-name>
+```
+
+---
+
+**Test Version:** 1.0  
+**Last Updated:** November 2025

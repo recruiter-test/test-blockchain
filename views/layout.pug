@@ -4,11 +4,11 @@ html
     meta(charset='utf-8')
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
     meta(name='viewport', content='width=device-width, initial-scale=1')
-    meta(name='description', content='A live blockchain demo in a browser.')
-    meta(name='author', content='Anders Brownworth')
-    link(rel='icon', href='/favicon.ico')
+    meta(name='description', content='A live Sobapps - test in a browser.')
+    meta(name='author', content='James Jhon')
+    link(rel='icon', href='/favicon.png')
 
-    title Blockchain Demo
+    title Sobapps - test
 
     link(rel='stylesheet', href='/stylesheets/lib/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/lib/bootstrap-theme.min.css')
@@ -34,20 +34,38 @@ html
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.navbar-brand(href='/') #{__('Blockchain Demo')}
+          a.navbar-brand(href='/') 
+            span(style='font-size: 24px; margin-right: 8px;') ⛓️
+            | Sobapps - test
         #navbar.collapse.navbar-collapse
           ul.nav.navbar-nav.navbar-right
             li(class={active: page === 'hash'})
-              a(href='/hash') #{__('Hash')}
+              a(href='/hash') 
+                span(style='margin-right: 6px;') #️⃣
+                | Hash
             li(class={active: page === 'block'})
-              a(href='/block') #{__('Block')}
+              a(href='/block') 
+                span(style='margin-right: 6px;') 📦
+                | Block
             li(class={active: page === 'blockchain'})
-              a(href='/blockchain') #{__('Blockchain')}
+              a(href='/blockchain') 
+                span(style='margin-right: 6px;') ⛓️
+                | Blockchain
             li(class={active: page === 'distributed'})
-              a(href='/distributed') #{__('Distributed')}
+              a(href='/distributed') 
+                span(style='margin-right: 6px;') 🌐
+                | Distributed
             li(class={active: page === 'tokens'})
-              a(href='/tokens') #{__('Tokens')}
+              a(href='/tokens') 
+                span(style='margin-right: 6px;') 🪙
+                | Tokens
             li(class={active: page === 'coinbase'})
-              a(href='/coinbase') #{__('Coinbase')}
+              a(href='/coinbase') 
+                span(style='margin-right: 6px;') 💰
+                | Coinbase
+            li(class={active: page === 'history'})
+              a(href='/history') 
+                span(style='margin-right: 6px;') 📚
+                | History
 
     block content

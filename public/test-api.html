@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { margin: 10px; padding: 10px 20px; }
+        pre { background: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        .result { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Blockchain API Test</h1>
+    
+    <div>
+        <button onclick="testStats()">Test GET /api/history/stats</button>
+        <button onclick="testHistory()">Test GET /api/history</button>
+        <button onclick="testAllBlocks()">Test GET /api/blocks</button>
+        <button onclick="testSaveBlock()">Test POST /api/blocks</button>
+    </div>
+    
+    <div class="result">
+        <h3>Result:</h3>
+        <pre id="result">Click a button to test the API...</pre>
+    </div>
+
+    <script>
+        function showResult(data) {
+            document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+        }
+
+        function showError(error) {
+            document.getElementById('result').textContent = 'ERROR: ' + error;
+        }
+
+        function testStats() {
+            fetch('/api/history/stats')
+                .then(res => res.json())
+                .then(showResult)
+                .catch(showError);
+        }
+
+        function testHistory() {
+            fetch('/api/history?page=1&limit=10')
+                .then(res => res.json())
+                .then(showResult)
+                .catch(showError);
+        }
+
+        function testAllBlocks() {
+            fetch('/api/blocks')
+                .then(res => res.json())
+                .then(showResult)
+                .catch(showError);
+        }
+
+        function testSaveBlock() {
+            const block = {
+                blockNumber: Math.floor(Math.random() * 1000),
+                data: 'Test block at ' + new Date().toISOString(),
+                previousHash: '0000' + 'a'.repeat(60),
+                hash: '0000' + 'b'.repeat(60),
+                nonce: Math.floor(Math.random() * 100000),
+                difficulty: 4,
+                miner: 'Test'
+            };
+
+            fetch('/api/blocks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(block)
+            })
+                .then(res => res.json())
+                .then(showResult)
+                .catch(showError);
+        }
+    </script>
+</body>
+</html>

@@ -10,11 +10,29 @@ var routes = require('./routes/index');
 
 var app = express();
 
+// i18n configuration
+i18n.configure({
+  locales: ['en', 'es', 'fr', 'de', 'ja', 'zh'],
+  defaultLocale: 'en',
+  directory: path.join(__dirname, 'locales'),
+  cookie: 'locale',
+  queryParameter: 'lang',
+  updateFiles: false,
+  syncFiles: false,
+  indent: '  ',
+  logWarnFn: function(msg) {
+    console.warn('i18n warning:', msg);
+  },
+  logErrorFn: function(msg) {
+    console.error('i18n error:', msg);
+  }
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -55,9 +73,5 @@ app.use(function(err, req, res, next) {
   });
 });
 
-i18n.configure({
-  locales:['en', 'de', 'es', 'fr-CA', 'hi', 'ja', 'ko', 'nl', 'pl', 'pt', 'zh-CN', 'hu', 'id'],
-  directory: __dirname + '/locales'
-});
 
 module.exports = app;
