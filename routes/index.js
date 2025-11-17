@@ -6,11 +6,14 @@ var pagesRouter = require('./pages');
 var blocksRouter = require('./blocks');
 var historyRouter = require('./history');
 
+console.log("system is running: http://localhost:3000");
+
 // Mount page routes
 router.use('/', pagesRouter);
 
 // Mount API routes
 router.use('/api/blocks', blocksRouter);
 router.use('/api/history', historyRouter);
+
 
 module.exports = router;

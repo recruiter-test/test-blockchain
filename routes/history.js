@@ -29,6 +29,7 @@ router.get('/stats', function(req, res) {
 // DELETE /api/history - Clear all history
 router.delete('/', function(req, res) {
   try {
+    
     const deletedCount = storage.clearAllBlocks();
     
     res.json({

@@ -1,27 +1,20 @@
-# Sobapps - test - 30 Minute Developer Test
+# Blockchain Demo - Intermediate 1 Hour Developer Test
 
 ## Test Overview
-**Duration:** 30 minutes  
+**Duration:** 1 hour (60 minutes)  
+**Difficulty:** Intermediate  
 **Format:** Practical coding test with GitHub submission  
-**Goal:** Assess blockchain understanding and Node.js development skills
+**Goal:** Assess blockchain understanding, API development, and problem-solving skills
 
 ---
 
-## Setup Instructions (5 minutes)
-
-### For the Recruiter - Before the Test
-
-1. **Create a test repository** (or use existing blockchain-demo repo)
-2. **Make sure the repository is public** (so candidates can fork it)
-3. **Share the repository URL** with the candidate
+## Setup Instructions (10 minutes)
 
 ### For the Developer - Test Setup
 
 1. **Fork the repository:**
    - Go to the repository URL provided
-   - Click the "Fork"
-   
-    This creates a copy under your GitHub account
+   - Click the "Fork" button in the top-right corner
 
 2. **Clone YOUR forked repository:**
 ```bash
@@ -29,10 +22,9 @@ git clone <your-forked-repository-url>
 cd blockchain-demo
 ```
 
-3. **Create your test branch** (use your name):
+3. **Create your test branch:**
 ```bash
 git checkout -b test/<your-name>
-# Example: git checkout -b test/john-smith
 ```
 
 4. **Install dependencies:**
@@ -45,86 +37,243 @@ npm install
 npm start
 ```
 
-6. **Verify it works:**
-   - Open browser: `http://localhost:3000`
-   - Confirm the homepage loads
-
 ---
 
-## Test Tasks (20 minutes)
+## Test Tasks (44 minutes)
 
-### Task 1: Blockchain Concept Understanding (5 minutes)
+### Task 1: Blockchain Concept Questions (12 minutes)
 
-**Navigate through the demo and answer these questions in a file:**
+**Create a file:** `BLOCKCHAIN_ANSWERS.md`
 
-Create a file: `ANSWERS.md`
+Answer these questions with technical details:
 
 ```markdown
-# Blockchain Test Answers
+# Blockchain Concept Answers
 
-## Task 1: Concept Questions
+## Question 1: Hash Properties (5 points)
+Explain what happens when you:
+1. Change one character in the block data
+2. Change the nonce value
+3. Why is this important for blockchain security?
 
-1. What happens to the hash when you change data in a block?
+## Question 2: Mining Process (5 points)
+1. What is the purpose of mining?
+2. Why does finding a valid nonce take time?
+3. What would happen if we reduced difficulty from 4 to 2?
 
-2. What is a "nonce" and why is it needed?
+## Question 3: Chain Integrity (5 points)
+In the blockchain page:
+1. Why do subsequent blocks turn red when you modify one block?
+2. How would you fix the chain after modifying block #2?
+3. Explain the relationship between blocks using previousHash
 
-3. In the blockchain page, why do all subsequent blocks turn red when you modify one block?
-
-4. In the distributed blockchain, how does the network know which chain is correct?
+## Question 4: Distributed Consensus (5 points)
+1. If Peer A has blocks 1-5 and Peer B has blocks 1-6, which chain wins?
+2. What prevents someone from creating a fake longer chain?
+3. Why do we need multiple peers in a blockchain network?
 ```
 
-**Deliverable:** Complete `ANSWERS.md` with your answers
+**Deliverable:** Complete `BLOCKCHAIN_ANSWERS.md` with detailed answers
 
 ---
 
-### Task 2: Fix Code Issues (7 minutes)
+### Task 2: Build Block Search API (12 minutes)
 
-**File:** `routes/index.js`
+**Create a new API endpoint to search blocks by data content**
 
-**Problems to fix:**
-1. Remove unused `async` import
-2. Remove unused `next` parameters
-3. Add validation to prevent accessing invalid pages
-4. Add error handling
+**File to modify:** `routes/blocks.js`
 
-**Valid pages are:** `hash`, `block`, `blockchain`, `distributed`, `tokens`, `coinbase`
-
-**Deliverable:** Fixed `routes/index.js` file
-
----
-
-### Task 3: Add New API Endpoint (8 minutes)
-
-**Create a new API endpoint that returns block information as JSON**
+**New Endpoint:** `GET /api/blocks/search?query=<search-term>`
 
 **Requirements:**
-- Route: `GET /api/blocks/:blockNumber`
-- Returns JSON with block data
-- Example response:
+
+```javascript
+// Add this route to routes/blocks.js
+
+router.get('/search', function(req, res) {
+  try {
+    const query = req.query.query;
+    
+    // 1. Validate query parameter
+    if (!query || query.trim() === '') {
+      return res.status(400).json({
+        error: 'Query parameter is required'
+      });
+    }
+    
+    // 2. Get all blocks from storage
+    
+    // 3. Filter blocks where data contains the query (case-insensitive)
+    
+    // 4. Return results with metadata
+    res.json({
+      query: query,
+      found: matchingBlocks.length,
+      blocks: matchingBlocks
+    });
+    
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+```
+
+**Example Response:**
 ```json
 {
-  "blockNumber": 1,
-  "timestamp": "2024-11-16T10:30:00Z",
-  "data": "Sample transaction data",
-  "previousHash": "0000abc...",
-  "hash": "0000def...",
-  "nonce": 12345
+  "query": "transaction",
+  "found": 3,
+  "blocks": [
+    {
+      "blockNumber": 1,
+      "data": "First transaction",
+      "hash": "0000abc...",
+      "timestamp": "2025-11-17T10:00:00Z"
+    }
+  ]
 }
 ```
 
-**Where to add:**
-- Add the route in `routes/blocks.js` (API routes)
+**Test your endpoint:**
+```bash
+curl "http://localhost:3000/api/blocks/search?query=test"
+```
 
-**Deliverable:** Working API endpoint that returns JSON
+**Deliverable:** Working search endpoint with validation
 
 ---
 
-## Submission Instructions (5 minutes)
+### Task 3: Create Block Statistics API (12 minutes)
+
+**Build an endpoint that provides detailed blockchain statistics**
+
+**File to modify:** `routes/history.js`
+
+**New Endpoint:** `GET /api/history/detailed-stats`
+
+**Requirements:**
+
+Calculate and return:
+
+```javascript
+router.get('/detailed-stats', function(req, res) {
+  try {
+    const blocks = storage.getAllBlocks();
+    
+    // Calculate statistics:
+    // 1. Total blocks
+    // 2. Valid blocks (hash starts with 0000)
+    // 3. Invalid blocks
+    // 4. Average nonce value
+    // 5. Most recent block
+    // 6. Oldest block
+    // 7. Total data size (sum of all data lengths)
+    // 8. Blocks by difficulty level
+    
+    res.json({
+      totalBlocks: 0,
+      validBlocks: 0,
+      invalidBlocks: 0,
+      averageNonce: 0,
+      latestBlock: {},
+      oldestBlock: {},
+      totalDataSize: 0,
+      blocksByDifficulty: {
+        "4": 0,
+        "5": 0
+      },
+      miners: {
+        "Alice": 5,
+        "Bob": 3
+      }
+    });
+    
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+```
+
+**Example Response:**
+```json
+{
+  "totalBlocks": 10,
+  "validBlocks": 8,
+  "invalidBlocks": 2,
+  "averageNonce": 45230,
+  "latestBlock": {
+    "blockNumber": 9,
+    "timestamp": "2025-11-17T10:30:00Z"
+  },
+  "oldestBlock": {
+    "blockNumber": 0,
+    "timestamp": "2025-11-17T09:00:00Z"
+  },
+  "totalDataSize": 1024,
+  "blocksByDifficulty": {
+    "4": 8,
+    "5": 2
+  },
+  "miners": {
+    "Alice": 5,
+    "Bob": 3,
+    "Charlie": 2
+  }
+}
+```
+
+**Deliverable:** Working statistics endpoint with all calculations
+
+---
+
+### Task 4: Add Block Export Feature (Optional Bonus - 8 minutes)
+
+**Create an endpoint to export blocks as CSV**
+
+**File to modify:** `routes/blocks.js`
+
+**New Endpoint:** `GET /api/blocks/export/csv`
+
+**Requirements:**
+
+```javascript
+router.get('/export/csv', function(req, res) {
+  try {
+    const blocks = storage.getAllBlocks();
+    
+    // Create CSV format
+    let csv = 'BlockNumber,Timestamp,Data,Hash,PreviousHash,Nonce,Difficulty,Miner\n';
+    
+    blocks.forEach(block => {
+      // Escape commas in data field
+      const data = block.data.replace(/,/g, ';');
+      csv += `${block.blockNumber},${block.timestamp},${data},${block.hash},${block.previousHash},${block.nonce},${block.difficulty},${block.miner}\n`;
+    });
+    
+    // Set headers for file download
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename=blockchain-export.csv');
+    res.send(csv);
+    
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+```
+
+**Test:**
+Visit `http://localhost:3000/api/blocks/export/csv` in browser - should download CSV file
+
+**Deliverable:** Working CSV export
+
+---
+
+## Submission Instructions (6 minutes)
 
 ### Step 1: Commit Your Changes
 ```bash
 git add .
-git commit -m "Complete 30-minute blockchain test - <your-name>"
+git commit -m "Complete intermediate blockchain test - <your-name>"
 ```
 
 ### Step 2: Push to YOUR Fork
@@ -132,224 +281,137 @@ git commit -m "Complete 30-minute blockchain test - <your-name>"
 git push origin test/<your-name>
 ```
 
-### Step 3: Create Pull Request to Original Repository
-1. Go to **your forked repository** on GitHub
-2. You'll see a message: "test/<your-name> had recent pushes"
-3. Click "Compare & pull request" button
-4. **Important:** Make sure the base repository is the **original repo** (not your fork)
-5. Title: "Test Submission - <Your Name>"
-6. In the description, add:
-   - Time taken
-   - Any challenges faced
-   - Any assumptions made
-7. Click "Create pull request"
-
-### Step 4: Notify Recruiter
-Send a message confirming your submission with the PR link.
+### Step 3: Create Pull Request
+1. Go to your forked repository on GitHub
+2. Click "Compare & pull request"
+3. Base repository: **original repo**
+4. Title: "Intermediate Test - <Your Name>"
+5. Description: Add time taken and any notes
+6. Click "Create pull request"
 
 ---
 
 ## Evaluation Criteria
 
-### Task 1: Concept Understanding (30 points)
-- ✓ Correct understanding of hash properties (10 pts)
-- ✓ Explains nonce correctly (5 pts)
-- ✓ Understands blockchain immutability (10 pts)
-- ✓ Understands distributed consensus (5 pts)
+### Task 1: Concept Understanding (20 points)
+- ✓ Hash properties explanation (5 pts)
+- ✓ Mining process understanding (5 pts)
+- ✓ Chain integrity explanation (5 pts)
+- ✓ Distributed consensus (5 pts)
 
-### Task 2: Code Quality (35 points)
-- ✓ Removed unused imports (5 pts)
-- ✓ Clean code (no unused variables) (5 pts)
-- ✓ Added page validation (15 pts)
-- ✓ Proper error handling (10 pts)
+### Task 2: Search API (25 points)
+- ✓ Route created correctly (5 pts)
+- ✓ Query validation (5 pts)
+- ✓ Search logic implementation (10 pts)
+- ✓ Proper response format (5 pts)
 
-### Task 3: API Development (35 points)
-- ✓ Route created correctly (10 pts)
-- ✓ Returns valid JSON (10 pts)
-- ✓ Proper data structure (10 pts)
-- ✓ Code follows project conventions (5 pts)
+### Task 3: Statistics API (30 points)
+- ✓ Route created correctly (5 pts)
+- ✓ All statistics calculated (15 pts)
+- ✓ Correct calculations (5 pts)
+- ✓ Proper error handling (5 pts)
 
-### Bonus Points (10 points)
-- ✓ Added comments to code (3 pts)
-- ✓ Tested the API endpoint (3 pts)
-- ✓ Clean git commit messages (2 pts)
-- ✓ Completed under 30 minutes (2 pts)
+### Task 4: CSV Export (Bonus - 15 points)
+- ✓ Route created (3 pts)
+- ✓ CSV format correct (5 pts)
+- ✓ Headers set properly (4 pts)
+- ✓ Data escaping (3 pts)
 
-**Total: 100 points + 10 bonus**
+### Code Quality (10 points)
+- ✓ Clean code (3 pts)
+- ✓ Error handling (3 pts)
+- ✓ Comments (2 pts)
+- ✓ Testing (2 pts)
+
+**Total: 85 points + 15 bonus = 100 points**
 
 **Passing Score:**
-- Junior: 60+ points
-- Mid-Level: 75+ points
-- Senior: 85+ points
+- Junior: 50+ points
+- Mid-Level: 65+ points
+- Senior: 80+ points
 
 ---
 
-## Quick Reference for Developers
+## Quick Testing Guide
 
-### Testing Your API Endpoint
+### Test Search API:
 ```bash
-# In a new terminal (keep npm start running)
-curl http://localhost:3000/api/blocks/1
+# Search for blocks
+curl "http://localhost:3000/api/blocks/search?query=test"
+
+# Empty query (should return error)
+curl "http://localhost:3000/api/blocks/search?query="
+
+# No results
+curl "http://localhost:3000/api/blocks/search?query=xyz123"
 ```
 
-### Git Commands Cheat Sheet
+### Test Statistics API:
 ```bash
-# Check your branch
-git branch
-
-# See your changes
-git status
-
-# Check remote URL (should be YOUR fork)
-git remote -v
-
-# Add all changes
-git add .
-
-# Commit
-git commit -m "Your message"
-
-# Push to YOUR fork
-git push origin test/<your-name>
+curl http://localhost:3000/api/history/detailed-stats
 ```
 
-### Valid Page Names
-- hash
-- block
-- blockchain
-- distributed
-- tokens
-- coinbase
+### Test CSV Export:
+```bash
+# Download CSV
+curl http://localhost:3000/api/blocks/export/csv -o blockchain.csv
+
+# View in terminal
+curl http://localhost:3000/api/blocks/export/csv
+```
 
 ---
 
-## Sample Solutions (For Recruiter Reference Only)
+## Hints & Tips
 
-### Task 2: Fixed routes/pages.js
+### Task 1:
+- Use the demo pages to experiment
+- Think about real-world blockchain applications
+- Consider security implications
+
+### Task 2:
+- Use JavaScript `.filter()` method
+- Use `.toLowerCase()` for case-insensitive search
+- Use `.includes()` to check if data contains query
+
+### Task 3:
+- Use `.reduce()` for calculations
+- Check hash with `.startsWith('0000')`
+- Handle empty blockchain case
+- Use object to count miners
+
+### Task 4:
+- Remember to escape special characters in CSV
+- Set proper Content-Type header
+- Use Content-Disposition for download
+
+---
+
+## Sample Code Snippets
+
+### Filter blocks:
 ```javascript
-var express = require('express');
-var router = express.Router();
-
-// Valid pages list
-const validPages = ['hash', 'block', 'blockchain', 'distributed', 'tokens', 'coinbase'];
-
-router.get('/', function(req, res) {
-  res.render('index');
-});
-
-router.get('/:page', function(req, res, next) {
-  const page = req.params.page;
-  
-  // Validate page exists
-  if (!validPages.includes(page)) {
-    return next(); // Pass to 404 handler
-  }
-  
-  res.render(page, {page: page});
-});
-
-module.exports = router;
+const filtered = blocks.filter(block => 
+  block.data.toLowerCase().includes(query.toLowerCase())
+);
 ```
 
-### Task 3: API Endpoint in routes/blocks.js
+### Calculate average:
 ```javascript
-// GET /api/blocks/:blockNumber - Get specific block
-router.get('/:blockNumber', function(req, res) {
-  const blockNumber = parseInt(req.params.blockNumber);
-  
-  // Validate block number
-  if (isNaN(blockNumber) || blockNumber < 0) {
-    return res.status(400).json({
-      error: 'Invalid block number'
-    });
-  }
-  
-  // Sample block data
-  const blockData = {
-    blockNumber: blockNumber,
-    timestamp: new Date().toISOString(),
-    data: `Transaction data for block ${blockNumber}`,
-    previousHash: blockNumber > 0 ? '0000' + 'a'.repeat(60) : '0',
-    hash: '0000' + 'b'.repeat(60),
-    nonce: Math.floor(Math.random() * 100000)
-  };
-  
-  res.json(blockData);
+const sum = blocks.reduce((acc, block) => acc + block.nonce, 0);
+const average = blocks.length > 0 ? sum / blocks.length : 0;
+```
+
+### Count by property:
+```javascript
+const miners = {};
+blocks.forEach(block => {
+  miners[block.miner] = (miners[block.miner] || 0) + 1;
 });
 ```
 
 ---
 
-## Tips for Recruiters
-
-### Before the Test
-- [ ] Repository is set up and public (so it can be forked)
-- [ ] Test instructions have been shared
-- [ ] Repository URL has been provided to candidate
-- [ ] Timer is ready (30 minutes)
-
-### During the Test
-- [ ] Start timer when candidate begins coding
-- [ ] Be available for technical issues (not coding help)
-- [ ] Monitor for any Git/GitHub access issues
-
-### After the Test
-- [ ] Review the Pull Request
-- [ ] Check commit history and timestamps
-- [ ] Test the code locally
-- [ ] Score using the rubric above
-- [ ] Provide feedback within 24 hours
-
-### Red Flags
-- ❌ No commits or empty PR
-- ❌ Code doesn't run
-- ❌ Copied solutions without understanding
-- ❌ No attempt at Task 3
-- ❌ Poor Git practices (no commits, bad messages)
-
-### Green Flags
-- ✅ Clean, readable code
-- ✅ Good commit messages
-- ✅ All tasks attempted
-- ✅ Code runs without errors
-- ✅ Shows understanding in answers
-- ✅ Asks good questions
-
----
-
-## Troubleshooting
-
-### "npm install" fails
-```bash
-# Clear cache and retry
-npm cache clean --force
-npm install
-```
-
-### Port 3000 already in use
-```bash
-# Windows
-netstat -ano | findstr :3000
-taskkill /PID <PID> /F
-
-# Or change port in bin/www file
-```
-
-### Git push permission denied
-- Make sure you forked the repository first
-- Verify you're pushing to YOUR fork (not the original repo)
-- Check the remote URL: `git remote -v`
-- Ensure you're authenticated with GitHub
-
-### Can't create branch
-```bash
-# Make sure you're on main/master first
-git checkout main
-git pull
-git checkout -b test/<your-name>
-```
-
----
-
-**Test Version:** 1.0  
-**Last Updated:** November 2025
+**Test Version:** 1.5 (Intermediate)  
+**Last Updated:** November 2025  
+**Difficulty:** Intermediate/Mid-Level

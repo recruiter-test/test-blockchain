@@ -4,12 +4,12 @@ MAINTAINER https://github.com/recruiter-test/test-blockchain
 
 EXPOSE     3000
 
-WORKDIR    /blockchain-demo 
+WORKDIR    /test-blockchain 
 
-COPY       package.json /blockchain-demo
+COPY       package.json /test-blockchain
 
 RUN        npm install
 
-COPY       . /blockchain-demo 
+COPY       . /test-blockchain
 
 CMD        ["node", "bin/www"]
