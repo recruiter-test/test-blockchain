@@ -29,6 +29,7 @@
     "i18n": "^0.14.2",
     "morgan": "^1.10.0",
     "pug": "^3.0.1",
+    "request": "^2.88.2",
     "serve-favicon": "^2.5.0"
   },
   "homepage": "https://github.com/recruiter-test/test-blockchain#readme",

@@ -19,8 +19,9 @@
 
 1. **Fork the repository:**
    - Go to the repository URL provided
-   - Click the "Fork" button in the top-right corner
-   - This creates a copy under your GitHub account
+   - Click the "Fork"
+   
+    This creates a copy under your GitHub account
 
 2. **Clone YOUR forked repository:**
 ```bash
