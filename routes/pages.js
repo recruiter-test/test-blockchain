@@ -21,5 +21,6 @@ router.get('/:page', function(req, res, next) {
   res.render(page, { page: page });
 });
 
+console.log("system is running: http://localhost:3000");
 
 module.exports = router;
