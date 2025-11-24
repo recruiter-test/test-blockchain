@@ -48,6 +48,39 @@ router.post('/', function(req, res) {
   }
 });
 
+// GET /api/blocks/search?query=...
+router.get('/search', function(req, res) {
+  try {
+    const query = req.query.query;
+
+    // 1. Validate input
+    if (!query || query.trim() === '') {
+      return res.status(400).json({
+        error: 'Query parameter is required'
+      });
+    }
+
+    // 2. Get all blocks
+    const blocks = storage.getAllBlocks();
+
+    // 3. Case-insensitive search inside each block's data
+    const matchingBlocks = blocks.filter(block => {
+      return String(block.data).toLowerCase().includes(query.toLowerCase());
+    });
+
+    // 4. Return metadata + results
+    res.json({
+      query: query,
+      found: matchingBlocks.length,
+      blocks: matchingBlocks
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 // GET /api/blocks/:blockNumber - Get specific block (MUST BE AFTER /)
 router.get('/:blockNumber', function(req, res) {
   try {
