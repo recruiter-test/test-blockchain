@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var storage = require('../utils/fileStorage');
 
-// GET /api/blocks - Get all blocks (MUST BE BEFORE /:blockNumber)
+// GET /api/blocks
 router.get('/', function(req, res) {
   try {
     const blocks = storage.getAllBlocks();
@@ -48,7 +48,45 @@ router.post('/', function(req, res) {
   }
 });
 
-// GET /api/blocks/:blockNumber - Get specific block (MUST BE AFTER /)
+// -----------------------------
+// SEARCH BLOCKS ENDPOINT
+// -----------------------------
+router.get('/search', function(req, res) {
+  try {
+    const query = req.query.query;
+
+    // 1. Validate query parameter
+    if (!query || query.trim() === '') {
+      return res.status(400).json({
+        error: 'Query parameter is required'
+      });
+    }
+
+    // 2. Get all blocks from storage
+    const allBlocks = storage.getAllBlocks();
+
+    // 3. Case-insensitive search
+    const lowerQuery = query.toLowerCase();
+
+    const matchingBlocks = allBlocks.filter(block =>
+      block.data &&
+      block.data.toLowerCase().includes(lowerQuery)
+    );
+
+    // 4. Return results with metadata
+    res.json({
+      query: query,
+      found: matchingBlocks.length,
+      blocks: matchingBlocks
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+// GET /api/blocks/:blockNumber
 router.get('/:blockNumber', function(req, res) {
   try {
     const blockNumber = parseInt(req.params.blockNumber);
@@ -102,5 +140,32 @@ router.delete('/:blockNumber', function(req, res) {
   }
 });
 
+// ===============================
+// TASK 4 - CSV EXPORT ENDPOINT
+// GET /api/blocks/export/csv
+// ===============================
+router.get('/export/csv', function(req, res) {
+  try {
+    const blocks = storage.getAllBlocks();
+
+    // CSV header row
+    let csv = 'BlockNumber,Timestamp,Data,Hash,PreviousHash,Nonce,Difficulty,Miner\n';
+
+    // Build CSV rows
+    blocks.forEach(block => {
+      const safeData = block.data ? block.data.replace(/,/g, ';') : '';
+      csv += `${block.blockNumber},${block.timestamp},${safeData},${block.hash},${block.previousHash},${block.nonce},${block.difficulty},${block.miner}\n`;
+    });
+
+    // Set headers so browser will download file
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename=blockchain-export.csv');
+
+    res.send(csv);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 module.exports = router;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
