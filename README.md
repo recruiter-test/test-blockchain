@@ -1,4 +1,4 @@
-# Blockchain Demo - Intermediate 1 Hour Developer Test
+# Demo - Intermediate 1 Hour Developer Test
 
 ## Test Overview
 **Duration:** 1 hour (60 minutes)  
