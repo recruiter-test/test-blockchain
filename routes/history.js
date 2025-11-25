@@ -16,7 +16,7 @@ router.get('/', function(req, res) {
   }
 });
 
-// GET /api/history/stats - Basic blockchain statistics
+// GET /api/history/stats - Get blockchain statistics
 router.get('/stats', function(req, res) {
   try {
     const stats = storage.getStats();
