@@ -140,4 +140,32 @@ router.delete('/:blockNumber', function(req, res) {
   }
 });
 
+// ===============================
+// TASK 4 - CSV EXPORT ENDPOINT
+// GET /api/blocks/export/csv
+// ===============================
+router.get('/export/csv', function(req, res) {
+  try {
+    const blocks = storage.getAllBlocks();
+
+    // CSV header row
+    let csv = 'BlockNumber,Timestamp,Data,Hash,PreviousHash,Nonce,Difficulty,Miner\n';
+
+    // Build CSV rows
+    blocks.forEach(block => {
+      const safeData = block.data ? block.data.replace(/,/g, ';') : '';
+      csv += `${block.blockNumber},${block.timestamp},${safeData},${block.hash},${block.previousHash},${block.nonce},${block.difficulty},${block.miner}\n`;
+    });
+
+    // Set headers so browser will download file
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename=blockchain-export.csv');
+
+    res.send(csv);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
