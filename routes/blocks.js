@@ -33,6 +33,32 @@ function getAllBlocks() {
 // ------------------------
 // SEARCH ENDPOINT
 // ------------------------
+// EXPORT BLOCKS AS CSV
+// ------------------------
+router.get('/export/csv', function(req, res) {
+    try {
+        const allBlocks = blocks; // using the same blocks array from Task 2
+
+        // CSV header
+        let csv = 'BlockNumber,Timestamp,Data,Hash,PreviousHash,Nonce,Difficulty,Miner\n';
+
+        allBlocks.forEach(block => {
+            // Escape commas in data
+            const data = block.data.replace(/,/g, ';');
+            csv += `${block.blockNumber},${block.timestamp},${data},${block.hash},${block.previousHash},${block.nonce},${block.difficulty},${block.miner}\n`;
+        });
+
+        // Set headers for file download
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename=blockchain-export.csv');
+        res.send(csv);
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// ------------------------
 router.get('/search', function(req, res) {
     try {
         const query = req.query.query;
