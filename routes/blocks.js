@@ -102,5 +102,45 @@ router.delete('/:blockNumber', function(req, res) {
   }
 });
 
+// -----------------------------------------------------------
+// TASK 2: SEARCH API - Get blocks containing specific text
+// -----------------------------------------------------------
+router.get('/search', function (req, res) {
+  try {
+    const query = req.query.query;
 
-module.exports = router;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+    // Validate query parameter
+    if (!query || query.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        message: 'Query parameter is required'
+      });
+    }
+
+    // Load all blocks
+    const blocks = storage.getAllBlocks();
+
+    // Filter (case-insensitive search)
+    const matchingBlocks = blocks.filter(block =>
+      block.data.toLowerCase().includes(query.toLowerCase())
+    );
+
+    // Return result
+    return res.json({
+      success: true,
+      query: query,
+      totalMatches: matchingBlocks.length,
+      results: matchingBlocks
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: error.message
+    });
+  }
+});
+
+// Export router
+module.exports = router;
