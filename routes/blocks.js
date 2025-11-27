@@ -48,6 +48,65 @@ router.post('/', function(req, res) {
   }
 });
 
+// GET /api/blocks/search?query=...
+router.get('/search', function(req, res) {
+  try {
+    const query = req.query.query;
+
+    // 1. Validate input
+    if (!query || query.trim() === '') {
+      return res.status(400).json({
+        error: 'Query parameter is required'
+      });
+    }
+
+    // 2. Get all blocks
+    const blocks = storage.getAllBlocks();
+
+    // 3. Case-insensitive search inside each block's data
+    const matchingBlocks = blocks.filter(block => {
+      return String(block.data).toLowerCase().includes(query.toLowerCase());
+    });
+
+    // 4. Return metadata + results
+    res.json({
+      query: query,
+      found: matchingBlocks.length,
+      blocks: matchingBlocks
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET /api/blocks/export/csv - Export blockchain as CSV
+router.get('/export/csv', function(req, res) {
+  try {
+    const blocks = storage.getAllBlocks();
+    
+    // CSV header row
+    let csv = 'BlockNumber,Timestamp,Data,Hash,PreviousHash,Nonce,Difficulty,Miner\n';
+    
+    blocks.forEach(block => {
+      // escape commas so CSV is not broken
+      const data = String(block.data).replace(/,/g, ';');
+      
+      csv += `${block.blockNumber},${block.timestamp},${data},${block.hash},${block.previousHash},${block.nonce},${block.difficulty},${block.miner}\n`;
+    });
+
+    // Download file headers
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename=blockchain-export.csv');
+
+    res.send(csv);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 // GET /api/blocks/:blockNumber - Get specific block (MUST BE AFTER /)
 router.get('/:blockNumber', function(req, res) {
   try {
