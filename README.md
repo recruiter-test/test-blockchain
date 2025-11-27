@@ -1,7 +1,7 @@
 # Demo - Intermediate Developer Test
 
 ## Test Overview
-**Duration:** 1 hour (30 minutes)  
+**Duration:** 30 minutes  
 **Difficulty:** Intermediate  
 **Format:** Practical coding test with GitHub submission  
 **Goal:** Assess blockchain understanding, API development, and problem-solving skills
