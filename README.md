@@ -1,14 +1,14 @@
-# Demo - Intermediate 1 Hour Developer Test
+# Demo - Intermediate Developer Test
 
 ## Test Overview
-**Duration:** 1 hour (60 minutes)  
+**Duration:** 1 hour (30 minutes)  
 **Difficulty:** Intermediate  
 **Format:** Practical coding test with GitHub submission  
 **Goal:** Assess blockchain understanding, API development, and problem-solving skills
 
 ---
 
-## Setup Instructions (10 minutes)
+## Setup Instructions (5 minutes)
 
 ### For the Developer - Test Setup
 
@@ -39,9 +39,9 @@ npm start
 
 ---
 
-## Test Tasks (44 minutes)
+## Test Tasks (20 minutes)
 
-### Task 1: Blockchain Concept Questions (12 minutes)
+### Task 1: Blockchain Concept Questions (5 minutes)
 
 **Create a file:** `BLOCKCHAIN_ANSWERS.md`
 
@@ -77,7 +77,7 @@ In the blockchain page:
 
 ---
 
-### Task 2: Build Block Search API (12 minutes)
+### Task 2: Build Block Search API (5 minutes)
 
 **Create a new API endpoint to search blocks by data content**
 
@@ -143,7 +143,7 @@ curl "http://localhost:3000/api/blocks/search?query=test"
 
 ---
 
-### Task 3: Create Block Statistics API (12 minutes)
+### Task 3: Create Block Statistics API (10 minutes)
 
 **Build an endpoint that provides detailed blockchain statistics**
 
@@ -226,7 +226,7 @@ router.get('/detailed-stats', function(req, res) {
 
 ---
 
-### Task 4: Add Block Export Feature (Optional Bonus - 8 minutes)
+### Task 4: Add Block Export Feature (Optional Bonus - 5 minutes)
 
 **Create an endpoint to export blocks as CSV**
 
