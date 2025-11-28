@@ -26,6 +26,58 @@ router.get('/stats', function(req, res) {
   }
 });
 
+router.get('/detailed-stats', function(req, res) {
+  try {
+    const blocks = storage.getAllBlocks();
+
+    const totalBlocks = blocks.length;
+
+    const validBlocks = blocks.filter(b => String(b.hash || '').startsWith('0000')).length;
+
+    const invalidBlocks = totalBlocks - validBlocks;
+
+    const averageNonce =
+      totalBlocks > 0
+        ? blocks.reduce((sum, b) => sum + Number(b.nonce || 0), 0) / totalBlocks
+        : 0;
+
+    const latestBlock = totalBlocks > 0 ? blocks[blocks.length - 1] : {};
+
+    const oldestBlock = totalBlocks > 0 ? blocks[0] : {};
+
+    const totalDataSize = blocks.reduce((sum, b) => {
+      return sum + String(b.data || '').length;
+    }, 0);
+
+    const blocksByDifficulty = {};
+    blocks.forEach(b => {
+      const diff = String(b.difficulty || 'unknown');
+      blocksByDifficulty[diff] = (blocksByDifficulty[diff] || 0) + 1;
+    });
+
+    const miners = {};
+    blocks.forEach(b => {
+      const miner = b.miner || 'Unknown';
+      miners[miner] = (miners[miner] || 0) + 1;
+    });
+
+    res.json({
+      totalBlocks,
+      validBlocks,
+      invalidBlocks,
+      averageNonce,
+      latestBlock,
+      oldestBlock,
+      totalDataSize,
+      blocksByDifficulty,
+      miners
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // DELETE /api/history - Clear all history
 router.delete('/', function(req, res) {
   try {
