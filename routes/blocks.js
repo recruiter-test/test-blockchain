@@ -3,6 +3,33 @@ var router = express.Router();
 var storage = require('../utils/fileStorage');
 
 // GET /api/blocks - Get all blocks (MUST BE BEFORE /:blockNumber)
+
+router.get('/search', function(req, res) {
+  try {
+    const query = req.query.query;
+
+    if (!query || query.trim() === '') {
+      return res.status(400).json({
+        error: 'Query parameter is required'
+      });
+    }
+
+    const blocks = storage.getAllBlocks();
+
+    const matchingBlocks = blocks.filter(block =>
+      String(block.data).toLowerCase().includes(query.toLowerCase())
+    );
+
+    res.json({
+      query: query,
+      found: matchingBlocks.length,
+      blocks: matchingBlocks
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 router.get('/', function(req, res) {
   try {
     const blocks = storage.getAllBlocks();
@@ -101,6 +128,8 @@ router.delete('/:blockNumber', function(req, res) {
     res.status(500).json({ error: error.message });
   }
 });
+
+
 
 
 module.exports = router;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
