@@ -42,3 +42,70 @@ router.delete('/', function(req, res) {
 });
 
 module.exports = router;
+router.get('/detailed-stats', function(req, res) {
+    try {
+        const blocks = storage.getAllBlocks();
+
+        if (!blocks || blocks.length === 0) {
+            return res.json({
+                totalBlocks: 0,
+                validBlocks: 0,
+                invalidBlocks: 0,
+                averageNonce: 0,
+                latestBlock: null,
+                oldestBlock: null,
+                totalDataSize: 0,
+                blocksByDifficulty: {},
+                miners: {}
+            });
+        }
+
+        // Total blocks
+        const totalBlocks = blocks.length;
+
+        // Valid blocks (hash starts with 0000)
+        const validBlocks = blocks.filter(b => b.hash.startsWith('0000')).length;
+
+        // Invalid blocks
+        const invalidBlocks = totalBlocks - validBlocks;
+
+        // Average nonce
+        const averageNonce = blocks.reduce((acc, b) => acc + b.nonce, 0) / totalBlocks;
+
+        // Most recent block
+        const latestBlock = blocks.reduce((a, b) => new Date(a.timestamp) > new Date(b.timestamp) ? a : b);
+
+        // Oldest block
+        const oldestBlock = blocks.reduce((a, b) => new Date(a.timestamp) < new Date(b.timestamp) ? a : b);
+
+        // Total data size
+        const totalDataSize = blocks.reduce((acc, b) => acc + b.data.length, 0);
+
+        // Blocks by difficulty
+        const blocksByDifficulty = {};
+        blocks.forEach(b => {
+            blocksByDifficulty[b.difficulty] = (blocksByDifficulty[b.difficulty] || 0) + 1;
+        });
+
+        // Count miners
+        const miners = {};
+        blocks.forEach(b => {
+            miners[b.miner] = (miners[b.miner] || 0) + 1;
+        });
+
+        res.json({
+            totalBlocks,
+            validBlocks,
+            invalidBlocks,
+            averageNonce,
+            latestBlock,
+            oldestBlock,
+            totalDataSize,
+            blocksByDifficulty,
+            miners
+        });
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
