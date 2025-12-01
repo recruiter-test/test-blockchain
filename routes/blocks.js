@@ -48,7 +48,65 @@ router.post('/', function(req, res) {
   }
 });
 
-// GET /api/blocks/:blockNumber - Get specific block (MUST BE AFTER /)
+// GET /api/blocks/search - Search blocks by data content
+router.get('/search', function(req, res) {
+  try {
+    const query = req.query.query;
+    
+    // 1. Validate query parameter
+    if (!query || query.trim() === '') {
+      return res.status(400).json({
+        error: 'Query parameter is required'
+      });
+    }
+    
+    // 2. Get all blocks from storage
+    const allBlocks = storage.getAllBlocks();
+    
+    // 3. Filter blocks where data contains the query (case-insensitive)
+    const searchTerm = query.toLowerCase();
+    const matchingBlocks = allBlocks.filter(block => {
+      return block.data && block.data.toString().toLowerCase().includes(searchTerm);
+    });
+    
+    // 4. Return results with metadata
+    res.json({
+      query: query,
+      found: matchingBlocks.length,
+      blocks: matchingBlocks
+    });
+    
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET /api/blocks/export/csv - Download blocks as CSV
+router.get('/export/csv', function(req, res) {
+  try {
+    const blocks = storage.getAllBlocks();
+    
+    // Create CSV format
+    let csv = 'BlockNumber,Timestamp,Data,Hash,PreviousHash,Nonce,Difficulty,Miner\n';
+    
+    blocks.forEach(block => {
+      // Escape commas in data field to prevent breaking CSV format
+      const data = (block.data || '').toString().replace(/,/g, ';');
+      
+      csv += `${block.blockNumber},${block.timestamp},${data},${block.hash},${block.previousHash},${block.nonce},${block.difficulty},${block.miner || ''}\n`;
+    });
+    
+    // Set headers for file download
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename=blockchain-export.csv');
+    res.send(csv);
+    
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET /api/blocks/:blockNumber - Get specific block (MUST BE AFTER /search and /export)
 router.get('/:blockNumber', function(req, res) {
   try {
     const blockNumber = parseInt(req.params.blockNumber);
@@ -62,7 +120,7 @@ router.get('/:blockNumber', function(req, res) {
     
     // Try to get from file storage
     let block = storage.getBlockByNumber(blockNumber);
-    
+ 
     // If not found, create sample data
     if (!block) {
       block = {
@@ -102,5 +160,4 @@ router.delete('/:blockNumber', function(req, res) {
   }
 });
 
-
-module.exports = router;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+module.exports = router;
