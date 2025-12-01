@@ -8,92 +8,121 @@ block content
           div(style='font-size: 64px; margin-bottom: 15px;') 📦
           h1(style='font-size: 36px; font-weight: 700; margin-bottom: 10px;') Blockchain Block
           p.lead(style='color: #64748b;') Understand how mining works by finding a valid hash
-        
+
         .well(style='background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; margin-bottom: 30px;')
           .row
             .col-md-12.text-center
               h3(style='color: white; margin-bottom: 15px;') ⛏️ Mining Explained
-              p(style='font-size: 16px; opacity: 0.95; margin: 0;') Mining is the process of finding a nonce that produces a hash starting with four zeros (0000...). Click "Mine" to find it!
-        
+              p(style='font-size: 16px; opacity: 0.95; margin: 0;')
+                | Mining is the process of finding a nonce that produces a hash starting with four zeros (0000...)
+
         .well#block1chain1well(style='padding: 30px;')
           form.form-horizontal
-            .form-group(style='margin-bottom: 25px;')
-              label.control-label(for='block1chain1number', style='font-size: 16px; font-weight: 600; margin-bottom: 12px;') 
+
+            .form-group
+              label.control-label(for='block1chain1number')
                 span(style='margin-right: 8px;') #️⃣
                 | Block Number
-              div
-                .input-group
-                  span.input-group-addon(style='background: #f8fafc; border-color: #e2e8f0;') #
-                  input#block1chain1number.form-control(type='number', value='1', style='font-size: 15px;')
+              .input-group
+                span.input-group-addon(style='background: #f8fafc; border-color: #e2e8f0;') #
+                input#block1chain1number.form-control(type='number', value='1')
 
-            .form-group(style='margin-bottom: 25px;')
-              label.control-label(for='block1chain1nonce', style='font-size: 16px; font-weight: 600; margin-bottom: 12px;') 
+            .form-group
+              label.control-label(for='block1chain1nonce')
                 span(style='margin-right: 8px;') 🎲
-                | Nonce (Number used once)
-              div
-                input#block1chain1nonce.form-control(type='text', value='72608', style='font-family: monospace; font-size: 14px;')
-                p.text-muted(style='margin-top: 8px; font-size: 13px;') The magic number that makes the hash valid
+                | Nonce
+              input#block1chain1nonce.form-control(type='text', value='0')
+              p.text-muted The magic number that makes the hash valid
 
-            .form-group(style='margin-bottom: 25px;')
-              label.control-label(for='block1chain1data', style='font-size: 16px; font-weight: 600; margin-bottom: 12px;') 
+            .form-group
+              label.control-label(for='block1chain1data')
                 span(style='margin-right: 8px;') 📝
                 | Block Data
-              div
-                textarea#block1chain1data.form-control(rows='6', placeholder='Enter transaction data...', style='font-size: 14px; resize: vertical;')
+              textarea#block1chain1data.form-control(rows='6')
 
-            #state.form-group(style='margin-bottom: 25px;')
-              label.control-label(for='block1chain1hash', style='font-size: 16px; font-weight: 600; margin-bottom: 12px;') 
+            .form-group
+              label.control-label(for='block1chain1hash')
                 span(style='margin-right: 8px;') 🔐
                 | Block Hash
-              div
-                input#block1chain1hash.form-control(type='text', disabled, style='font-family: monospace; font-size: 13px; background: #f8fafc; font-weight: 600;')
-                p.text-muted(style='margin-top: 8px; font-size: 13px;') Hash must start with 0000 to be valid
+              input#block1chain1hash.form-control(type='text', disabled)
+              p.text-muted Hash must start with 0000 to be valid
 
-            .form-group(style='margin-bottom: 0;')
-              div
-                button#block1chain1mineButton.btn.btn-success.btn-lg.ladda-button(data-style='expand-right', style='width: 100%; padding: 15px; font-size: 18px; font-weight: 600;')
-                  span.ladda-label 
-                    span(style='margin-right: 10px;') ⛏️
-                    | Start Mining
-        
+            .form-group
+              button#block1chain1mineButton.btn.btn-success.btn-lg.ladda-button(
+                type='button',
+                data-style='expand-right',
+                style='width: 100%; padding: 15px; font-size: 18px; font-weight: 600;'
+              )
+                span.ladda-label
+                  span(style='margin-right: 10px;') ⛏️
+                  | Start Mining
+
+            .form-group
+              button#saveBlock.btn.btn-primary.btn-lg(
+                type='button',
+                style='width: 100%; padding: 12px; margin-top: 15px;'
+              )
+                | Save Block
+
         .row(style='margin-top: 30px;')
           .col-md-6
             .well(style='background: #eff6ff; border-color: #93c5fd;')
-              h4(style='color: #2563eb; margin-top: 0;') 
+              h4(style='color: #2563eb; margin-top: 0;')
                 span(style='margin-right: 8px;') ✅
                 | Valid Block
-              p(style='font-size: 14px; color: #64748b; margin: 0;') When the hash starts with 0000, the block is valid and can be added to the blockchain
-          
+              p(style='color: #64748b;')
+                | When hash starts with 0000, block is valid
+
           .col-md-6
             .well(style='background: #fef2f2; border-color: #fca5a5;')
-              h4(style='color: #ef4444; margin-top: 0;') 
+              h4(style='color: #ef4444; margin-top: 0;')
                 span(style='margin-right: 8px;') ❌
                 | Invalid Block
-              p(style='font-size: 14px; color: #64748b; margin: 0;') If the hash doesn't start with 0000, the block is invalid and must be mined again
+              p(style='color: #64748b;')
+                | If the hash doesn't start with 0000, you must mine again
 
-  script.
-    $(function() {
-      $('#block1chain1number').bind('input propertychange', function() { updateHash(1, 1); });
-      $('#block1chain1nonce').bind('input propertychange', function() { updateHash(1, 1); });
-      $('#block1chain1data').bind('input propertychange', function() { updateHash(1, 1); });
-      mineButtonAnimation(1, 1);
-      updateHash(1, 1);
-    });
+    // LOAD existing mining javascript
+    script(src='/javascripts/block.js')
 
-    function getText(block, chain) {
-      return $('#block'+block+'chain'+chain+'number').val() +
-             $('#block'+block+'chain'+chain+'nonce').val() +
-             $('#block'+block+'chain'+chain+'data').val();
-    }
+    // SAVE BLOCK AJAX HANDLER
+    script.
+      $(function () {
 
-    function mineButtonAnimation(block, chain) {
-      $('#block'+block+'chain'+chain+'mineButton').click(function(e) {
-          e.preventDefault();
-          var l = Ladda.create(this);
-          l.start();
-          setTimeout(function() {
-              mine(block, chain, false);
-              l.stop();
-            }, 250); // give UI time to update
+        // Save block event
+        $('#saveBlock').click(function () {
+
+          const blockNumber = $('#block1chain1number').val();
+          const nonce = $('#block1chain1nonce').val();
+          const data = $('#block1chain1data').val();
+          const hash = $('#block1chain1hash').val();
+          const previousHash = "0"; // For block #1 only
+
+          if (!hash.startsWith('0000')) {
+            alert("❌ Hash is invalid. Please mine again.");
+            return;
+          }
+
+          $.ajax({
+            url: '/api/blocks',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+              blockNumber: blockNumber,
+              data: data,
+              previousHash: previousHash,
+              hash: hash,
+              nonce: nonce,
+              difficulty: 4,
+              miner: 'local-user'
+            }),
+            success: function () {
+              alert("✅ Block saved successfully!");
+            },
+            error: function (err) {
+              alert("❌ Error saving block: " + err.responseText);
+            }
+          });
+
         });
-    }
+
+      });
