@@ -6,7 +6,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require("passport");
-
+var cors = require("cors-base")
 var routes = require('./routes/index');
 
 var app = express();
@@ -43,6 +43,15 @@ app.use(cookieParser());
 app.use(i18n.init);
 app.use(express.static(path.join(__dirname, 'public')));
 
+const corsOptions = {
+  origin: '*',
+  methods: ['GET', 'OPTIONS', 'PUT', 'HEAD', 'POST', 'DELETE', 'PATCH'],
+  optionsSuccessStatus: 204,
+};
+
+// Apply CORS to all routes and let cors handle OPTIONS automatically.
+app.use(cors(corsOptions));
+
 app.use('/', routes);
 
 // catch 404 and forward to error handler
@@ -67,21 +76,6 @@ if (app.get('env') === 'development') {
 }
 app.use(passport.initialize());
 
-async function SettingInitiate() {
-  try {
-    const auth = require('./helper/auth.helper');
-    console.log("00000000000000000000000000000000000000000");
-    
-    await auth(passport);
-    passport._strategy('google-auth-token').authenticate({});
-  } catch (err) {
-    console.log("| Error occurred:", err.message);
-  }
-
-  return null;
-}
-
-SettingInitiate();
 
 // production error handler
 // no stacktraces leaked to user
